@@ -1,0 +1,32 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2025-03-11 01:35:50.448611",
+  "name": "Team Leader",
+  "role_profile": "Team Leader",
+  "roles": [
+   {
+    "parent": "Team Leader",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "L1"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2025-03-11 01:36:18.675140",
+  "name": "Team Member",
+  "role_profile": "Team Member",
+  "roles": [
+   {
+    "parent": "Team Member",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "L2"
+   }
+  ]
+ }
+]

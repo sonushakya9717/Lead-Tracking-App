@@ -1,0 +1,54 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-03-11 01:10:38.674481",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "last_assigned_cc_team",
+  "last_assigned_lr_team",
+  "last_assigned_customer_team"
+ ],
+ "fields": [
+  {
+   "fieldname": "last_assigned_cc_team",
+   "fieldtype": "Data",
+   "label": "Last Assigned CC Team"
+  },
+  {
+   "fieldname": "last_assigned_lr_team",
+   "fieldtype": "Data",
+   "label": "Last Assigned LR Team"
+  },
+  {
+   "fieldname": "last_assigned_customer_team",
+   "fieldtype": "Data",
+   "label": "Last Assigned Customer Team"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-03-11 02:01:55.582505",
+ "modified_by": "Administrator",
+ "module": "Lead Tracking",
+ "name": "Lead Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

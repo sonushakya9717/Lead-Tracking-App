@@ -5,6 +5,27 @@ app_description = "Lead tracking app"
 app_email = "support@assetplus.com"
 app_license = "MIT"
 
+fixtures = [ {
+    "dt": "Role", "filters": [
+        [
+            "name", "in", [
+                "L1", "L2"
+            ]
+        ]
+    ]
+}, {
+    "dt": "Role Profile", "filters": [
+        [
+            "name", "in", [
+                "Team Member",
+                "Team Leader"
+            ]
+        ]
+    ]
+},
+"Workflow State","Workflow Action Master","Workflow"
+]
+
 # Includes in <head>
 # ------------------
 
