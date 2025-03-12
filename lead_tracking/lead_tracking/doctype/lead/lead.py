@@ -4,32 +4,67 @@ from slugify import slugify
 from frappe.model.document import Document
 
 class Lead(Document):
+    def before_insert(self):
+        self.owner_of_lead = frappe.session.user
 
     def after_insert(self):
         """Assign new leads when created with 'Cold Calling' status."""
-        self.owner_of_lead = frappe.session.user
-
         if self.status == "Cold Calling":
             assign_to_team_and_l2(self, "CC Team")
+            self.create_user_permission()
 
-    def on_change(self):
+    def on_update(self):
         """Handle lead reassignments based on status changes."""
         previous_status = self.get_doc_before_save().status if self.get_doc_before_save() else None
-
-        if self.status == "Lead":
-            remove_all_shares(self.name)
-            assign_to_team_and_l2(self, "LR Team")
-
-        elif self.status == "Register":
-            if previous_status == "Cold Calling":
+        if previous_status != self.status:
+            if self.status == "Lead":
                 remove_all_shares(self.name)
                 assign_to_team_and_l2(self, "LR Team")
-            elif previous_status == "Lead":
-                frappe.msgprint("✅ Previous status was 'Lead' — Keeping the current team assignment.")
+                self.create_user_permission()
 
-        elif self.status == "Customer":
-            remove_all_shares(self.name)
-            assign_to_team_and_l2(self, "Customer Team")
+            elif self.status == "Register":
+                if previous_status == "Cold Calling":
+                    remove_all_shares(self.name)
+                    assign_to_team_and_l2(self, "LR Team")
+                    self.create_user_permission()
+                elif previous_status == "Lead":
+                    frappe.msgprint("✅ Previous status was 'Lead' — Keeping the current team assignment.")
+
+            elif self.status == "Customer":
+                remove_all_shares(self.name)
+                assign_to_team_and_l2(self, "Customer Team")
+                self.create_user_permission()
+
+    def create_user_permission(self):
+            frappe.db.delete("User Permission", {
+                "allow": "Lead",
+                "for_value": self.name
+                })
+
+            # Create new permission
+            permissions = frappe.get_doc({
+                "doctype": "User Permission",
+                "user": self.assigned_to,
+                "allow": "Lead",
+                "for_value": self.name,
+                "apply_to_all_doctypes": 0
+            })
+            permissions.insert(ignore_permissions=True)
+            permissions.save(ignore_permissions=True)
+
+            team_leader = frappe.db.get_value("Teams", self.assigned_team, "team_Leader")
+            if team_leader:
+                # Create new permission for Team Leader
+                permissions = frappe.get_doc({
+                    "doctype": "User Permission",
+                    "user": team_leader,
+                    "allow": "Lead",
+                    "for_value": self.name,
+                    "apply_to_all_doctypes": 0
+                })
+                permissions.insert(ignore_permissions=True)
+                permissions.save(ignore_permissions=True)
+            
 
 # ------------------------------- #
 #       ASSIGNMENT LOGIC          #
